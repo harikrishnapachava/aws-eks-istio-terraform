@@ -18,7 +18,7 @@ spec:
         istio: monitor
     spec:
       containers:
-        - image: rekhugopal/eksistiodemo:latest
+        - image: harikrishnapachava/eksistiodemo:latest
           imagePullPolicy: Always
           name: ua-app
           env:
