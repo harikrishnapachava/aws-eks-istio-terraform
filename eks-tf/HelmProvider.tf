@@ -1,37 +1,22 @@
-# provider "helm" {
-#   kubernetes {
-#     host                   = aws_eks_cluster.demo.endpoint
-#     cluster_ca_certificate = base64decode(aws_eks_cluster.demo.certificate_authority[0].data)
-#     exec {
-#       api_version = "client.authentication.k8s.io/v1beta1"
-#       args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.demo.id]
-#       command     = "aws"
-#     }
-#   }
-# }
-
-#provider "helm" {
-#  kubernetes {
-#    config_path = "~/.kube/config"
-#  }
-#}
-
+# Retrieve the EKS cluster details
 data "aws_eks_cluster" "eks" {
   name = "demo"
 
   depends_on = [aws_eks_cluster.demo]
 }
 
+# Retrieve the authentication token for the EKS cluster
 data "aws_eks_cluster_auth" "eks" {
   name = "demo"
 
   depends_on = [aws_eks_cluster.demo]
 }
 
+# Configure the Helm provider for deploying Istio
 provider "helm" {
   kubernetes {
-    host                   = data.aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.eks.token
+    host                   = data.aws_eks_cluster.eks.endpoint # EKS cluster endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data) # Cluster CA certificate
+    token                  = data.aws_eks_cluster_auth.eks.token # Authentication token
   }
 }
