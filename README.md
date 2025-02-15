@@ -41,7 +41,7 @@ The Terraform configuration is organized into several files:
 - **IGW.tf**: Creates an Internet Gateway for the VPC.
 - **Subnets.tf**: Defines public and private subnets.
 - **NAT.tf**: Configures a NAT Gateway for private subnets.
-- **Routes.tf**: Sets up route tables for public and private subnets.
+- **Routes_and_RTAssociations.tf**: Sets up route tables for public and private subnets.
 - **EKS.tf**: Defines the EKS cluster and associated IAM roles.
 - **Nodes.tf**: Configures the node groups for the EKS cluster.
 - **IAMDriver.tf**: Sets up IAM roles for the EBS CSI driver.
