@@ -126,7 +126,8 @@ This README provides a comprehensive guide to setting up an EKS cluster with Ist
 ## Docker build
 docker build -t harikrishnapachava/eksistiodemo:latest .  
 
-## Docker Push
+## Docker tag and Push
+docker tag eksistiodemo:latest harikrishnapachava/eksistiodemo:latest  # Optional if already tagged during build
 docker push harikrishnapachava/eksistiodemo:latest 
 
 ## login to client pod 
