@@ -59,8 +59,10 @@ IAM OIDC (OpenID Connect) authentication for an Amazon EKS (Elastic Kubernetes S
 - **CI/CD Pipelines**: CI/CD tools running in Kubernetes can assume IAM roles to deploy applications or manage infrastructure.
 - **Data Processing**: Pods that need to access S3 buckets, DynamoDB tables, or other AWS services can do so securely using IAM roles.
 
-
-
+#
+#
+#
+#
 
 # **High-Level Steps for EKS Authentication and Authorization**
 
