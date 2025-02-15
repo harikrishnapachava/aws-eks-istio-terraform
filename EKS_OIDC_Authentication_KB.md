@@ -229,3 +229,41 @@ To allow users in an IAM group (e.g., `myk8sadmins`) to connect to your Amazon E
    ```
 
 ---
+
+### **Step 3: Configure `kubectl` for IAM Users**
+1. **Install and Configure `awscli`**:
+   - Ensure the users in the `myk8sadmins` group have the AWS CLI installed and configured with their IAM credentials.
+
+2. **Update `kubeconfig` for EKS Access**:
+   - Each user should update their `kubeconfig` file to authenticate with the EKS cluster using their IAM credentials.
+   - Run the following command:
+     ```bash
+     aws eks update-kubeconfig --region <region> --name <cluster-name>
+     ```
+   - This command automatically configures `kubectl` to use the IAM user's credentials to authenticate with the EKS cluster.
+
+3. **Verify Access**:
+   - Users can verify their access by running:
+     ```bash
+     kubectl get pods --all-namespaces
+     ```
+   - If the RBAC and IAM configurations are correct, they should be able to perform operations like creating, deleting, and managing Kubernetes resources.
+
+---
+
+### **Step 4: Test and Troubleshoot**
+1. **Test Permissions**:
+   - Have users in the `myk8sadmins` group test their permissions by creating, deleting, and managing resources in the cluster.
+
+2. **Troubleshoot Access Issues**:
+   - If users cannot access the cluster, check the following:
+     - Ensure the IAM group has the correct permissions.
+     - Verify the `aws-auth` ConfigMap is correctly configured.
+     - Check the Kubernetes RBAC roles and bindings.
+     - Ensure the OIDC provider is correctly set up for the EKS cluster.
+
+---
+
+### **Summary**
+By following these steps, you can grant users in the myk8sadmins IAM group access to your EKS cluster using kubectl. They will be able to create, delete, and manage Kubernetes objects based on the permissions defined in the Kubernetes RBAC roles and bindings. This approach leverages AWS IAM and Kubernetes RBAC for secure and fine-grained access control.
+
