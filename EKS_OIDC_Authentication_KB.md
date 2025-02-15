@@ -59,23 +59,7 @@ IAM OIDC (OpenID Connect) authentication for an Amazon EKS (Elastic Kubernetes S
 - **CI/CD Pipelines**: CI/CD tools running in Kubernetes can assume IAM roles to deploy applications or manage infrastructure.
 - **Data Processing**: Pods that need to access S3 buckets, DynamoDB tables, or other AWS services can do so securely using IAM roles.
 
-### Steps to Enable IAM OIDC Authentication for EKS:
 
-1. **Create an OIDC Identity Provider**:
-   - Go to the IAM console in AWS.
-   - Create a new identity provider with the EKS cluster's OIDC issuer URL.
-
-2. **Create an IAM Role**:
-   - Create an IAM role with the necessary permissions.
-   - Update the role's trust policy to allow the OIDC provider to assume the role.
-
-3. **Associate the IAM Role with a Kubernetes Service Account**:
-   - Create a Kubernetes service account and annotate it with the IAM role ARN.
-
-4. **Deploy Pods with the Service Account**:
-   - Deploy pods that use the annotated service account, and they will automatically assume the IAM role.
-
-By using IAM OIDC authentication, you can enhance the security and manageability of your EKS clusters, ensuring that your workloads have the appropriate permissions to interact with AWS resources.
 
 
 # **High-Level Steps for EKS Authentication and Authorization**
