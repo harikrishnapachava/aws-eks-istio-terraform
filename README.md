@@ -122,18 +122,17 @@ This README provides a comprehensive guide to setting up an EKS cluster with Ist
 
 
 
-***TEST CASES***
-# Docker build
+# ***TEST CASES***
+## Docker build
 docker build -t harikrishnapachava/eksistiodemo:latest .  
 
-# Docker Push
+## Docker Push
 docker push harikrishnapachava/eksistiodemo:latest 
 
-
-# login to client pod 
+## login to client pod 
 kubectl exec -it client -n backend  -- sh  
 
-# Client pod (SVC) to Service mesh service communication
+## Client pod (SVC) to Service mesh service communication
 while true; do curl http://ss-app.staging:8080/api/devices && echo "" && sleep 1; done
 
 ## Check the service accessibility
