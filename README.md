@@ -122,13 +122,13 @@ This README provides a comprehensive guide to setting up an EKS cluster with Ist
 
 
 
-# AWS_EKS_Istio_ServiceMesh
 ***TEST CASES***
 # Docker build
 docker build -t harikrishnapachava/eksistiodemo:latest .  
-docker push harikrishnapachava/eksistiodemo:latest 
 
 # Docker Push
+docker push harikrishnapachava/eksistiodemo:latest 
+
 
 # login to client pod 
 kubectl exec -it client -n backend  -- sh  
