@@ -76,3 +76,108 @@ IAM OIDC (OpenID Connect) authentication for an Amazon EKS (Elastic Kubernetes S
    - Deploy pods that use the annotated service account, and they will automatically assume the IAM role.
 
 By using IAM OIDC authentication, you can enhance the security and manageability of your EKS clusters, ensuring that your workloads have the appropriate permissions to interact with AWS resources.
+
+
+# Allow users in an IAM group (e.g., `myk8sadmins`) to connect to your Amazon EKS cluster
+To allow users in an IAM group (e.g., `myk8sadmins`) to connect to your Amazon EKS cluster using `kubectl` and perform operations like creating, deleting, and managing Kubernetes objects, you need to configure **AWS IAM** and **Kubernetes RBAC (Role-Based Access Control)**.
+
+---
+
+### **Step 1: Configure IAM for EKS Access**
+1. **Create an IAM Policy for EKS Access**:
+   - Create an IAM policy that allows users to interact with the EKS cluster.
+   - Example policy (`eks-access-policy.json`):
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Action": [
+             "eks:DescribeCluster",
+             "eks:ListClusters"
+           ],
+           "Resource": "*"
+         }
+       ]
+     }
+     ```
+   - Attach this policy to the IAM group `myk8sadmins`.
+
+2. **Ensure Users Can Assume Roles**:
+   - If your users need to assume roles (e.g., for cross-account access), ensure the IAM group has the necessary permissions to assume roles.
+
+---
+
+### **Step 2: Map IAM Users/Groups to Kubernetes RBAC**
+1. **Enable IAM OIDC Provider for Your EKS Cluster**:
+   - Ensure your EKS cluster has an OIDC provider configured. You can check this in the AWS Management Console under **EKS > Your Cluster > Configuration > OIDC Provider**.
+   - If not enabled, follow the [AWS guide](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html) to set it up.
+
+2. **Create a Kubernetes Role and RoleBinding**:
+   - Define a Kubernetes `Role` or `ClusterRole` with the necessary permissions (e.g., create, delete, update resources).
+   - Bind this role to the IAM group `myk8sadmins` using a `RoleBinding` or `ClusterRoleBinding`.
+
+   Example:
+   ```yaml
+   # Create a ClusterRole with admin permissions
+   apiVersion: rbac.authorization.k8s.io/v1
+   kind: ClusterRole
+   metadata:
+     name: eks-admin-role
+   rules:
+   - apiGroups: ["*"]
+     resources: ["*"]
+     verbs: ["*"]
+   ---
+   # Bind the ClusterRole to the IAM group
+   apiVersion: rbac.authorization.k8s.io/v1
+   kind: ClusterRoleBinding
+   metadata:
+     name: eks-admin-binding
+   subjects:
+   - kind: Group
+     name: myk8sadmins  # This must match the IAM group name
+     apiGroup: rbac.authorization.k8s.io
+   roleRef:
+     kind: ClusterRole
+     name: eks-admin-role
+     apiGroup: rbac.authorization.k8s.io
+   ```
+
+3. **Map IAM Group to Kubernetes RBAC**:
+   - Update the `aws-auth` ConfigMap in the `kube-system` namespace to map the IAM group `myk8sadmins` to the Kubernetes RBAC group.
+
+   Example:
+   ```yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: aws-auth
+     namespace: kube-system
+   data:
+     mapRoles: |
+       - rolearn: arn:aws:iam::123456789012:role/my-iam-role
+         username: system:node:{{EC2PrivateDNSName}}
+         groups:
+           - system:bootstrappers
+           - system:nodes
+     mapUsers: |
+       - userarn: arn:aws:iam::123456789012:user/my-user
+         username: my-user
+         groups:
+           - myk8sadmins
+     mapGroups: |
+       - grouparn: arn:aws:iam::123456789012:group/myk8sadmins
+         username: myk8sadmins
+         groups:
+           - myk8sadmins
+   ```
+
+   Apply the ConfigMap:
+   ```bash
+   kubectl apply -f aws-auth-configmap.yaml
+   ```
+
+---
+
