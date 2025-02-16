@@ -44,7 +44,8 @@ The Terraform configuration is organized into several files:
 - **Routes_and_RTAssociations.tf**: Sets up route tables for public and private subnets.
 - **EKS.tf**: Defines the EKS cluster and associated IAM roles.
 - **Nodes.tf**: Configures the node groups for the EKS cluster.
-- **IAM_role_n_policy_for_EBSCSI_Driver.tf**: Sets up IAM roles for the EBS CSI driver.
+- **IAM_role_n_policy_for_EBSCSI_Driver.tf**: Creates IAM roles and policies for the EBS CSI driver.
+- **IAM_role_n_policy_for_elb_addon.tf**: Creates IAM Roles and Policies for the AWS Load Balancer Controller.
 - **Create_IAM_OIDC_Provider.tf**: Configures OpenID Connect (OIDC) for EKS.
 - **EBS_CSI_Driver_AddOn.tf**: Adds the EBS CSI driver to the EKS cluster.
 - **HelmProvider.tf**: Configures the Helm provider for deploying Istio.
