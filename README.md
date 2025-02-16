@@ -31,6 +31,7 @@ The architecture consists of the following components:
 - **EKS Cluster**: A managed Kubernetes cluster running on AWS.
 - **Istio Service Mesh**: Istio components (Istiod, Istio Gateway, and Istio Base) deployed using Helm.
 - **Node Groups**: Managed node groups for running workloads on the EKS cluster.
+- **AWS Load Balancer Controller**: Manages Application Load Balancers (ALBs) for Kubernetes services and Ingress resources.
 
 ## Terraform Configuration
 
@@ -95,10 +96,18 @@ The Helm configuration includes default values for Istio components:
    helm install gateway -n istio-ingress --create-namespace istio/gateway
    ```
 
-6. **Verify Deployment**:
+6. **Deploy the AWS Load Balancer Controller using Helm:**:
+   ```bash
+   helm repo add eks https://aws.github.io/eks-charts
+   helm repo update
+   helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=demo --set serviceAccount.create=true --set serviceAccount.name=aws-load-balancer-controller
+   ```
+
+7. **Verify Deployment**:
    ```bash
    kubectl get pods -n istio-system
    kubectl get pods -n istio-ingress
+   kubectl get pods -n kube-system | grep aws-load-balancer-controller
    ```
 
 ## Cleanup
