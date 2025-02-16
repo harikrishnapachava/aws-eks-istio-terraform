@@ -48,9 +48,10 @@ The Terraform configuration is organized into several files:
 - **Create_IAM_OIDC_Provider.tf**: Configures OpenID Connect (OIDC) for EKS.
 - **EBS_CSI_Driver_AddOn.tf**: Adds the EBS CSI driver to the EKS cluster.
 - **HelmProvider.tf**: Configures the Helm provider for deploying Istio.
-- **Istiod.tf**: Deploys Istiod (Istio control plane) using Helm.
-- **IstioBase.tf**: Deploys the Istio base component using Helm.
-- **IstioGateway.tf**: Deploys the Istio Gateway using Helm.
+- **helm_deploy_Istiod.tf**: Deploys Istiod (Istio control plane) using Helm.
+- **helm_deploy_IstioBase.tf**: Deploys the Istio base component using Helm.
+- **helm_deploy_IstioGateway.tf**: Deploys the Istio Gateway using Helm.
+- **helm_deploy_elb.tf**: Deploys the AWS Load Balancer Controller Using Helm.
 
 ## Helm Configuration
 
